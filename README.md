@@ -1,5 +1,5 @@
 ## 🌤️ WeatherArt for Samsung Frame
-WeatherArt is an automated script that generates daily weather-inspired artwork for the Samsung Frame TV. It is designed as an experiment in Calm Technology—replacing dashboard widgets with ambient visualization.
+WeatherArt is an automated script that generates daily weather-inspired artwork for the Samsung Frame TV. It is designed as an experiment in [Calm Technology](https://calmtech.com/)—replacing dashboard widgets with ambient visualization.
 
 ### How it Works
 - **Fetch:** Runs every morning to grab local weather data.
@@ -8,14 +8,15 @@ WeatherArt is an automated script that generates daily weather-inspired artwork 
 - **Display:** Uploads the final piece to the Frame TV via the local API.
 
 ## Inspiration
-Inspired by Max Braun's Accent.ink, this project aims to make the "smart home" feel less like a computer and more like a home.
+Inspired by Max Braun's [Accent.ink](https://onezero.medium.com/meet-accent-352cfa95813a), this project aims to make the "smart home" feel less like a computer and more like a home.
 
-## Features
-- Weather-driven prompt generation (BOM XML).
-- Optional mock weather data for testing.
-- Image generation via Gemini.
-- Upload/replace images on a Samsung Frame TV.
-- Logging and CLI flags for production use.
+---
+
+## Example Outputs
+
+![WeatherArt example 1](examples/20260103_104256.jpg)
+
+![WeatherArt example 2](examples/20260104_142718.jpg)
 
 ---
 
