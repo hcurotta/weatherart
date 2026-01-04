@@ -1,0 +1,49 @@
+conditions:
+  - id: clear_summer_day
+    temp_min: "18"
+    temp_max: "31"
+    temp_range: "18-31 deg"
+    forecast: "Sunny. Light northeasterly winds."
+    date: "2026-01-03"
+  - id: stormy_afternoon
+    temp_min: "22"
+    temp_max: "34"
+    temp_range: "22-34 deg"
+    forecast: "Partly cloudy. High chance of showers. A thunderstorm likely in the afternoon."
+    date: "2026-01-03"
+  - id: cool_rainy_day
+    temp_min: "11"
+    temp_max: "18"
+    temp_range: "11-18 deg"
+    forecast: "Cloudy with frequent showers. Light southerly winds."
+    date: "2026-06-12"
+  - id: windy_winter
+    temp_min: "6"
+    temp_max: "14"
+    temp_range: "6-14 deg"
+    forecast: "Cold and windy. Showers easing in the evening."
+    date: "2026-07-08"
+  - id: humid_overcast
+    temp_min: "24"
+    temp_max: "29"
+    temp_range: "24-29 deg"
+    forecast: "Overcast. Very humid. The chance of a late shower."
+    date: "2026-02-21"
+  - id: foggy_morning
+    temp_min: "9"
+    temp_max: "20"
+    temp_range: "9-20 deg"
+    forecast: "Fog early. Mostly sunny later with light winds."
+    date: "2026-05-02"
+  - id: hot_northwesterly
+    temp_min: "23"
+    temp_max: "39"
+    temp_range: "23-39 deg"
+    forecast: "Hot and dry. Fresh northwesterly winds."
+    date: "2026-01-15"
+  - id: coastal_showers
+    temp_min: "19"
+    temp_max: "25"
+    temp_range: "19-25 deg"
+    forecast: "Showers near the coast. Light onshore breezes."
+    date: "2026-03-30"
