@@ -2,8 +2,8 @@
 WeatherArt is an automated script that generates daily weather-inspired artwork for the Samsung Frame TV. It is designed as an experiment in [Calm Technology](https://calmtech.com/)—replacing dashboard widgets with ambient visualization.
 
 ### How it Works
-- **Fetch:** Runs every morning to grab local weather data.
-- **Generate:** Uses Google Gemini Nano Banana to generate a prompt-based image (defined in prompts.yaml) reflecting the current weather conditions.
+- **Fetch:** Runs every morning to grab hourly weather from Open-Meteo.
+- **Generate:** Uses Google Gemini Nano Banana to generate a prompt-based image (defined in prompts.yaml) that reflects the weather from now until the end of the day, mapped across 8 left-to-right segments.
 - **Embed:** Subtly embeds the min/max temperature range into the image pixels, making the data visible only when you look for it.
 - **Display:** Uploads the final piece to the Frame TV via the local API.
 
@@ -77,14 +77,16 @@ Key variables:
 - `GEMINI_API_KEY` (required)
 - `WEATHERART_TV_IP` (recommended)
 - `WEATHERART_TV_MAC` (optional, used to resolve IP via ARP)
+- `WEATHERART_LAT` (default: -33.8688)
+- `WEATHERART_LON` (default: 151.2093)
+- `WEATHERART_TIMEZONE` (default: Australia/Sydney)
+- `WEATHERART_OPEN_METEO_URL` (default: https://api.open-meteo.com/v1/forecast)
 - `WEATHERART_WOL_PORT` (default: 9)
 - `WEATHERART_WOL_BROADCAST` (default: 255.255.255.255)
 - `WEATHERART_WOL_WAIT_S` (default: 8)
 - `WEATHERART_TIMEOUT_S`
 - `WEATHERART_UPLOAD_TIMEOUT_S`
 - `WEATHERART_CATEGORY` (defaults to `MY-C0002`)
-- `WEATHERART_BOM_URL` (defaults to BOM IDN11060)
-- `WEATHERART_AREA_NAME` (defaults to `Sydney`)
 - `WEATHERART_IMAGE_PATH` (fallback local image)
 - `GEMINI_MODEL` (default `gemini-3-pro-image-preview`)
 
@@ -92,7 +94,9 @@ Example `.env`:
 ```
 GEMINI_API_KEY=your-key-here
 WEATHERART_TV_IP=192.168.200.200
-WEATHERART_AREA_NAME=Sydney
+WEATHERART_LAT=-33.8688
+WEATHERART_LON=151.2093
+WEATHERART_TIMEZONE=Australia/Sydney
 ```
 
 ---
@@ -187,14 +191,14 @@ Options:
 `prompts.yaml` contains a list of prompt templates. Each template can reference these variables:
 - `{{width}}`, `{{height}}`
 - `{{temp_min}}`, `{{temp_max}}`, `{{temp_range}}`
-- `{{forecast}}`
+- `{{segments_summary}}`
 - `{{date}}`
 
 ---
 
 ## Weather Mocks
 
-`weather_mocks.yaml` provides reusable mock conditions for testing prompt generation without hitting the BOM feed.
+`weather_mocks.yaml` provides reusable mock conditions for testing prompt generation without hitting Open-Meteo.
 
 Use:
 ```
