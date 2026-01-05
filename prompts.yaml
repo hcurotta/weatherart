@@ -26,14 +26,14 @@ prompts:
       The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a rock formation, a tree shape, or clouds in the sky.
       The image must fill the space edge-to-edge with no border.
-  - id: arthur-boyd
-    template: |
-      Generate an image that is exactly {{width}} x {{height}}.
-      It should be a painting in the style of Arthur Boyd.
-      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
-      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
-      For example, it could be part of a tree trunk, a river shape, or clouds in the sky.
-      The image must fill the space edge-to-edge with no border.
+  # - id: arthur-boyd
+  #   template: |
+  #     Generate an image that is exactly {{width}} x {{height}}.
+  #     It should be a painting in the style of Arthur Boyd.
+  #     It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+  #     The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+  #     For example, it could be part of a tree trunk, a river shape, or clouds in the sky.
+  #     The image must fill the space edge-to-edge with no border.
   - id: jeffrey-smart
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
@@ -43,15 +43,15 @@ prompts:
       The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a building sign, a billboard, or road markings.
       The image must fill the space edge-to-edge with no border.
-  - id: brett-whiteley
-    template: |
-      Generate an image that is exactly {{width}} x {{height}}.
-      It should be a painting in the style of Brett Whiteley.
-      It should be of a classic Sydney harbour or city skyline scene, e.g. balcony 2 or lavender bay.
-      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
-      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
-      For example, it could be part of a building sign, or a boat name, or a banner.
-      The image must fill the space edge-to-edge with no border.
+  # - id: brett-whiteley
+  #   template: |
+  #     Generate an image that is exactly {{width}} x {{height}}.
+  #     It should be a painting in the style of Brett Whiteley.
+  #     It should be of a classic Sydney harbour or city skyline scene, e.g. balcony 2 or lavender bay.
+  #     It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+  #     The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+  #     For example, it could be part of a building sign, or a boat name, or a banner.
+  #     The image must fill the space edge-to-edge with no border.
   - id: yayoi-kusama
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
