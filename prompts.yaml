@@ -2,75 +2,61 @@ prompts:
   - id: sidney-nolan
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Sidney Nolan, specifically the Ned Kelly series, emphasizing his signature visual language with its bold colors and abstract forms.
-      The atmosphere of the image must reflect the day's weather from the start to the end of the day as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      It should be a painting in the style of Sidney Nolan.
+      It should be of a classic australian scene.
+      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example it could be a cloud shape, spelled out tree bark, or part of a signpost.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      The image must fill the space edge-to-edge with no border.
   - id: ken-done
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Ken Done, emphasizing his signature visual language with its bright, vibrant colors and simplified forms.
+      It should be a painting in the style of Ken Done.
       It should be of a classic Sydney harbour or city skyline scene.
-      The atmosphere of the image must reflect the day's weather from the start to the end of the day as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a building sign, or a boat name, or a banner.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      The image must fill the space edge-to-edge with no border.
   - id: albert-namatjira
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Albert Namatjira, emphasizing his signature visual language.
-      It should be of a classic Australian outback landscape with natural features, perhaps including a waterhole, rock formations, gum trees, or desert flora.
-      Depict the weather from now until the end of the day as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be represented in a single place somewhere such that it is cleverly incorporated seamlessly into the painting in a subtle way. It should not just be floating text or a faded overlay.
-      For example, it could be part of a rock formation, a tree shape/bark, or clouds in the sky.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      It should be a painting in the style of Albert Namatjira.
+      It should be of a classic Australian outback scene.
+      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      For example, it could be part of a rock formation, a tree shape, or clouds in the sky.
+      The image must fill the space edge-to-edge with no border.
   - id: arthur-boyd
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Arthur Boyd, emphasizing his signature visual language.
-      Depict the weather from now until the end of the day as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      It should be a painting in the style of Arthur Boyd.
+      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a tree trunk, a river shape, or clouds in the sky.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      The image must fill the space edge-to-edge with no border.
   - id: jeffrey-smart
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Jeffrey Smart, emphasizing his signature visual language.
-      It should be of a modern Sydney urban scene, perhaps suburban sprawl or inner city with terrace houses. Not necessarily a famous landmark, but a streetscape that is recognisably Sydney. The streets should be clean and orderly, with an emphasis on geometry and perspective. They should not be busy or crowded.
-      Depict the weather from now until the end of the day as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      It should be a painting in the style of Jeffrey Smart.
+      It should be of a modern Sydney urban scene. Not necessarily a famous landmark, but a streetscape that is recognisably Sydney.
+      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a building sign, a billboard, or road markings.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      The image must fill the space edge-to-edge with no border.
   - id: brett-whiteley
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Brett Whiteley, emphasizing his signature visual language.
+      It should be a painting in the style of Brett Whiteley.
       It should be of a classic Sydney harbour or city skyline scene, e.g. balcony 2 or lavender bay.
-      Depict the weather from now until the end of the day as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      It must overtly represent today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a building sign, or a boat name, or a banner.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      The image must fill the space edge-to-edge with no border.
   - id: yayoi-kusama
     template: |
       Generate an image that is exactly {{width}} x {{height}}.
-      In the unmistakable style of Yayoi Kusama, emphasizing her signature visual language.
-      It should be an abstract representation of today's weather from now until the end of the day.
-      Depict the weather as a subtle left-to-right progression across the canvas.
-      Use this trend as guidance, not as discrete steps: {{segments_summary}}.
-      The progression must be seamless with no visible boundaries, striping, or vertical bands.
-      The temperature range ({{temp_range}}) should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
+      It should be a painting in the style of Yayoi Kusama.
+      It should be an abstract representation of today's weather which is {{temp_range}} and described as: "{{forecast}}".
+      The temperature range should be written in a single place somewhere such that it is cleverly incorporated seamlessly in the picture in a subtle way.
       For example, it could be part of a pattern, or hidden among shapes.
-      The image must fill the space edge-to-edge with no border, white space or letterboxing.
+      The image must fill the space edge-to-edge with no border.

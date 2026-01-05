@@ -1,28 +1,25 @@
 import argparse
 import base64
-import json
 import logging
 import os
 import random
 import re
 from datetime import datetime
-from urllib.parse import urlencode
 from urllib.request import urlopen
+import xml.etree.ElementTree as ET
 
 from google import genai
 from google.genai import types
 import yaml
 
 from config import (
+    AREA_NAME,
+    BOM_URL,
     GEMINI_API_KEY,
     GEMINI_MODEL,
     IMAGE_HEIGHT,
     IMAGE_WIDTH,
     MOCKS_FILE,
-    OPEN_METEO_LAT,
-    OPEN_METEO_LON,
-    OPEN_METEO_TIMEZONE,
-    OPEN_METEO_URL,
     OUTPUT_DIR,
     PROMPTS_FILE,
 )
@@ -35,152 +32,66 @@ from logging_utils import setup_logging
 #   uv run python image_generation.py --log-level DEBUG --log-file logs.txt
 
 
-def _fetch_open_meteo():
-    params = {
-        "latitude": OPEN_METEO_LAT,
-        "longitude": OPEN_METEO_LON,
-        "hourly": "temperature_2m,precipitation,cloud_cover",
-        "timezone": OPEN_METEO_TIMEZONE,
-    }
-    url = f"{OPEN_METEO_URL}?{urlencode(params)}"
-    with urlopen(url, timeout=20) as response:
-        return json.loads(response.read().decode("utf-8"))
+def _fetch_bom_xml():
+    with urlopen(BOM_URL, timeout=20) as response:
+        return response.read()
 
 
-def _select_remaining_hours(hourly, now_local):
-    times = hourly.get("time", [])
-    temps = hourly.get("temperature_2m", [])
-    precip = hourly.get("precipitation", [])
-    clouds = hourly.get("cloud_cover", [])
-
-    hours = []
-    today = now_local.date()
-    for idx, ts in enumerate(times):
-        try:
-            dt = datetime.fromisoformat(ts)
-        except ValueError:
-            continue
-        if dt.date() != today or dt < now_local:
-            continue
-        hours.append(
-            {
-                "dt": dt,
-                "temp": temps[idx] if idx < len(temps) else None,
-                "precip": precip[idx] if idx < len(precip) else None,
-                "cloud": clouds[idx] if idx < len(clouds) else None,
-            }
-        )
-
-    if hours:
-        return hours
-
-    for idx, ts in enumerate(times):
-        try:
-            dt = datetime.fromisoformat(ts)
-        except ValueError:
-            continue
-        if dt.date() != today:
-            continue
-        hours.append(
-            {
-                "dt": dt,
-                "temp": temps[idx] if idx < len(temps) else None,
-                "precip": precip[idx] if idx < len(precip) else None,
-                "cloud": clouds[idx] if idx < len(clouds) else None,
-            }
-        )
-
-    return hours
+def _find_area(root, area_name):
+    target = area_name.strip().lower()
+    for area in root.iter("area"):
+        if area.get("description", "").strip().lower() == target:
+            return area
+    return None
 
 
-def _describe_cloud_cover(cloud_cover):
-    if cloud_cover is None:
-        return "unknown cloud cover"
-    if cloud_cover < 20:
-        return "clear skies"
-    if cloud_cover < 40:
-        return "mostly clear skies"
-    if cloud_cover < 60:
-        return "partly cloudy skies"
-    if cloud_cover < 80:
-        return "mostly cloudy skies"
-    return "overcast skies"
+def _get_forecast_period(area):
+    periods = list(area.findall(".//forecast-period"))
+    for desired in ("0", "1"):
+        for period in periods:
+            if period.get("index") == desired:
+                return period
+    return periods[0] if periods else None
 
 
-def _describe_precipitation(precip_mm):
-    if precip_mm is None:
-        return "unknown rainfall"
-    if precip_mm < 0.1:
-        return "no rain"
-    if precip_mm < 0.5:
-        return "very light rain"
-    if precip_mm < 2:
-        return "light rain"
-    if precip_mm < 5:
-        return "moderate rain"
-    return "heavy rain"
+def _get_text_by_type(period, tag, type_value):
+    for node in period.findall(tag):
+        if node.get("type") == type_value and node.text:
+            return node.text.strip()
+    return ""
 
 
-def _summarize_segment(segment):
-    clouds = [hour["cloud"] for hour in segment if hour["cloud"] is not None]
-    precip = [hour["precip"] for hour in segment if hour["precip"] is not None]
-
-    avg_cloud = sum(clouds) / len(clouds) if clouds else None
-    avg_precip = sum(precip) / len(precip) if precip else None
-    start_time = segment[0]["dt"].strftime("%H:%M")
-    end_time = segment[-1]["dt"].strftime("%H:%M")
-
-    return {
-        "start_time": start_time,
-        "end_time": end_time,
-        "cloud_desc": _describe_cloud_cover(avg_cloud),
-        "precip_desc": _describe_precipitation(avg_precip),
-    }
-
-
-def _build_segments(hours, segment_count=8):
-    if not hours:
-        return []
-    segments = []
-    total = len(hours)
-    for idx in range(segment_count):
-        start = int(idx * total / segment_count)
-        end = int((idx + 1) * total / segment_count)
-        if start >= total:
-            start = total - 1
-        if end <= start:
-            end = min(total, start + 1)
-        segments.append(_summarize_segment(hours[start:end]))
-    return segments
-
-
-def _format_segments_summary(segments):
-    lines = []
-    for idx, segment in enumerate(segments, start=1):
-        lines.append(
-            (
-                f"{idx}) {segment['start_time']}-{segment['end_time']}: "
-                f"{segment['cloud_desc']}, {segment['precip_desc']}"
-            )
-        )
-    return " | ".join(lines)
+def _find_first_element_text(area, type_value):
+    for node in area.findall(".//element"):
+        if node.get("type") == type_value and node.text:
+            return node.text.strip()
+    return ""
 
 
 def _build_prompt_context():
-    data = _fetch_open_meteo()
-    hourly = data.get("hourly", {})
-    now_local = datetime.now()
-    hours = _select_remaining_hours(hourly, now_local)
-    if not hours:
-        raise RuntimeError("No hourly data returned from Open-Meteo")
+    xml_data = _fetch_bom_xml()
+    root = ET.fromstring(xml_data)
+    area = _find_area(root, AREA_NAME)
+    if area is None:
+        raise RuntimeError(f"Area not found in BOM XML: {AREA_NAME}")
 
-    temps = [hour["temp"] for hour in hours if hour["temp"] is not None]
-    temp_min = str(int(round(min(temps)))) if temps else ""
-    temp_max = str(int(round(max(temps)))) if temps else ""
-    temp_range = f"{temp_min}-{temp_max} deg" if temp_min and temp_max else "unknown"
+    period = _get_forecast_period(area)
+    if period is None:
+        raise RuntimeError(f"No forecast periods found for area: {AREA_NAME}")
 
-    segments = _build_segments(hours, segment_count=8)
-    segments_summary = _format_segments_summary(segments)
+    temp_min = _get_text_by_type(period, "element", "air_temperature_minimum")
+    temp_max = _get_text_by_type(period, "element", "air_temperature_maximum")
+    if not temp_min:
+        temp_min = _find_first_element_text(area, "air_temperature_minimum")
+    if not temp_max:
+        temp_max = _find_first_element_text(area, "air_temperature_maximum")
+    forecast = _get_text_by_type(period, "text", "forecast")
+    if not forecast:
+        forecast = _get_text_by_type(period, "text", "precis")
+    if temp_min and temp_max:
+        temp_range = f"{temp_min}-{temp_max} deg"
+    else:
+        temp_range = "unknown"
 
     return {
         "width": IMAGE_WIDTH,
@@ -188,8 +99,8 @@ def _build_prompt_context():
         "temp_min": temp_min,
         "temp_max": temp_max,
         "temp_range": temp_range,
-        "segments_summary": segments_summary,
-        "date": now_local.strftime("%Y-%m-%d"),
+        "forecast": forecast,
+        "date": datetime.now().strftime("%Y-%m-%d"),
     }
 
 

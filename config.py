@@ -20,13 +20,11 @@ OUTPUT_DIR = os.path.join(SCRIPT_DIR, "generated")
 PROMPTS_FILE = os.path.join(SCRIPT_DIR, "prompts.yaml")
 MOCKS_FILE = os.path.join(SCRIPT_DIR, "weather_mocks.yaml")
 
-OPEN_METEO_URL = os.getenv(
-    "WEATHERART_OPEN_METEO_URL",
-    "https://api.open-meteo.com/v1/forecast",
+BOM_URL = os.getenv(
+    "WEATHERART_BOM_URL",
+    "ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml",
 )
-OPEN_METEO_LAT = float(os.getenv("WEATHERART_LAT", "-33.8688"))
-OPEN_METEO_LON = float(os.getenv("WEATHERART_LON", "151.2093"))
-OPEN_METEO_TIMEZONE = os.getenv("WEATHERART_TIMEZONE", "Australia/Sydney")
+AREA_NAME = os.getenv("WEATHERART_AREA_NAME", "Sydney")
 
 IMAGE_WIDTH = int(os.getenv("WEATHERART_IMAGE_WIDTH", "3840"))
 IMAGE_HEIGHT = int(os.getenv("WEATHERART_IMAGE_HEIGHT", "2160"))
