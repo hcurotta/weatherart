@@ -11,21 +11,40 @@ from samsungtvws import SamsungTVWS
 from config import LAST_ID_FILE
 
 
-def resolve_ip_from_mac(mac: str) -> Optional[str]:
+def _normalize_mac(mac: str) -> Optional[str]:
     if not mac:
+        return None
+    parts = [part for part in re.split(r"[^0-9a-fA-F]", mac) if part]
+    if len(parts) == 1:
+        hexstr = parts[0].lower()
+        if len(hexstr) == 12:
+            return hexstr
+        if len(hexstr) == 11:
+            return f"0{hexstr}"
+        return None
+    if len(parts) != 6:
+        return None
+    padded = [part.zfill(2).lower() for part in parts]
+    hexstr = "".join(padded)
+    return hexstr if len(hexstr) == 12 else None
+
+
+def resolve_ip_from_mac(mac: str) -> Optional[str]:
+    normalized = _normalize_mac(mac)
+    if not normalized:
         return None
     try:
         output = subprocess.check_output(["arp", "-a"], text=True)
     except (OSError, subprocess.CalledProcessError):
         return None
 
-    target = mac.lower()
-    pattern = re.compile(r"\((?P<ip>[^)]+)\)\s+at\s+(?P<mac>[^\\s]+)\\s", re.IGNORECASE)
+    pattern = re.compile(r"\((?P<ip>[^)]+)\)\s+at\s+(?P<mac>\S+)\s", re.IGNORECASE)
     for line in output.splitlines():
         match = pattern.search(line)
         if not match:
             continue
-        if match.group("mac").lower() == target:
+        candidate = _normalize_mac(match.group("mac"))
+        if candidate and candidate == normalized:
             return match.group("ip")
     return None
 
@@ -43,11 +62,8 @@ def select_tv_ip(ip: Optional[str], mac: Optional[str], fallback_ip: str, logger
 
 
 def wake_on_lan(mac: str, broadcast: str, port: int, logger) -> bool:
-    if not mac:
-        return False
-
-    clean = re.sub(r"[^0-9a-fA-F]", "", mac)
-    if len(clean) != 12:
+    clean = _normalize_mac(mac)
+    if not clean:
         logger.warning("Invalid MAC address for WOL: %s", mac)
         return False
 
